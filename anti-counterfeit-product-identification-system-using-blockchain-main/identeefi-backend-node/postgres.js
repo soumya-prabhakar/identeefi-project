@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -12,14 +13,15 @@ app.use(cors());
 const port = 5000;
 
 const client = new Client({
-    host: "localhost",
-    user: "postgres",
-    port: 5432,
-    password: "<HIDDEN>",
-    database: "postgres"
-})
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    },
+});
 
 client.connect()
+.then(() => console.log("Connected to Neon PostgreSQL"))
+.catch(err => console.error("Connection error", err));
 
 // auth
 
